@@ -1,0 +1,62 @@
+global:
+  scrape_interval:     15s
+  evaluation_interval: 15s
+
+  # Attach these labels to any time series or alerts when communicating with
+  # external systems (federation, remote storage, Alertmanager).
+  external_labels:
+      monitor: 'prometheus-stack-monitor'
+
+# Load and evaluate rules in this file every 'evaluation_interval' seconds.
+rule_files:
+  - "prometheus.rules.yml"
+
+scrape_configs:
+
+  - job_name: 'prometheus'
+
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'webserver'
+
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+    static_configs:
+      - targets: ['webserver:8000']
+
+  - job_name: 'machine-vm'
+
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+    static_configs:
+      - targets: ['cadvisor:8080']
+
+  - job_name: 'metrics-gateway'
+
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+    static_configs:
+      - targets: ['metrics-gateway:9091']
+
+  - job_name: 'node-exporter'
+
+    scrape_interval: 10s
+    scrape_timeout: 5s
+
+    static_configs:
+      - targets: ['64.227.122.100:9100','161.35.70.101:9100','64.227.122.146:9100','142.93.110.183:9100','161.35.70.89:9100','64.227.122.74:9100','64.227.114.220:9100','64.227.124.172:9100','161.35.70.172:9100','161.35.64.161:9100',
+                  '64.227.122.68:9100','64.227.122.108:9100','64.227.122.135:9100','161.35.70.156:9100','64.227.114.239:9100','134.122.79.23:9100','68.183.67.107:9100','161.35.27.48:9100','161.35.70.165:9100','64.227.114.131:9100','64.227.114.171:9100
+                  64.227.116.206:9100','64.227.122.91:9100','64.227.122.80:9100','64.227.124.113:9100']
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      - alertmanager:9093
